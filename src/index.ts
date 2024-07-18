@@ -1,6 +1,8 @@
 import express from "express"
 import mongoose from "mongoose"
 import userRoute from "./routes/userRoute"
+import prodcutRoute from './routes/productRoute'
+import { seedProduct } from "./services/productService"
 
 
 const app = express()
@@ -13,6 +15,9 @@ then(()=>console.log("connected")).
 catch((err)=>console.log("failed to connect",err))
 
 app.use('/user',userRoute)
+app.use('/product',prodcutRoute)
+
+seedProduct();
 app.listen(port,()=>{
     console.log("server is running at :http://localhost:3000")
 })
