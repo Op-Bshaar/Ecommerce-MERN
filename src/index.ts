@@ -3,6 +3,7 @@ import mongoose from "mongoose"
 import userRoute from "./routes/userRoute"
 import prodcutRoute from './routes/productRoute'
 import { seedProduct } from "./services/productService"
+import cartRoute from './routes/cartRoute'
 
 
 const app = express()
@@ -16,6 +17,7 @@ catch((err)=>console.log("failed to connect",err))
 
 app.use('/user',userRoute)
 app.use('/product',prodcutRoute)
+app.use('/cart',cartRoute)
 
 seedProduct();
 app.listen(port,()=>{
