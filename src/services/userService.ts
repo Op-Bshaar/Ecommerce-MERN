@@ -49,5 +49,5 @@ export const login = async({email,password}:loginDto)=>{
 }
 
 const genrateJwt=(data:any)=>{
-  return jwt.sign(data,'9mBx9Y3VhjDBUMjdjCz7KFU5xusTAz2R')
+  return jwt.sign(data, process.env.JWT_SECRET ||'')
 }
