@@ -1,4 +1,5 @@
 import { cartModel } from "../models/cartModel";
+import { IOrderItem, orderModel } from "../models/orderModel";
 import prodcutModel from "../models/productModel";
 
 interface CreateCartForUser{
@@ -162,4 +163,48 @@ export const clearCart = async({userId}:ClearCart)=>{
   return {data:updatedCart,statuscode:200}
 
  
+}
+
+
+interface Ckeckout{
+  userId:string
+  address:string
+}
+
+export const ckeckout = async({userId,address}:Ckeckout)=>{
+  if(!address){
+    return{data:"please add address", statusCode:400}
+  }
+  const cart = await getActiveCartForUser({userId}); 
+
+  const orderItems:IOrderItem[]=[]
+
+  for(const item of cart.items){
+
+      const product = await prodcutModel.findById(item.product)
+      if(!product){
+        return {data:"not found", statusCode:400}
+      }
+      const orderItem:IOrderItem = {
+        productTitle:product.title,
+        productImage:product?.image,
+        unitPrice:item.unitPrice,
+        quantity:item.quantity
+      } 
+    orderItems.push(orderItem)
+  }
+
+  const order = await orderModel.create({
+    orderItems,
+    total:cart.totalAmount,
+    address,
+    userId,
+  })
+  await order.save();
+
+  cart.status = "completed";
+
+  await order.save();
+
+  return{data:order,statsCode:200}
 }

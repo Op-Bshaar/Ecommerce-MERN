@@ -1,5 +1,5 @@
 import  express  from "express";
-import {  addItemToCart, clearCart, deleteItemToCart, getActiveCartForUser, updateItemToCart } from "../services/cartService";
+import {  addItemToCart, ckeckout, clearCart, deleteItemToCart, getActiveCartForUser, updateItemToCart } from "../services/cartService";
 import validateJWT, { extendReuest } from "../middlewares/ValidateJWT";
 
 
@@ -38,5 +38,13 @@ router.delete('/',validateJWT,async(req:extendReuest,res)=>{
    const response = await clearCart({userId})
    res.status(res.statusCode).send(response.data)  
 })
+
+router.post('/checkout',validateJWT,async(req:extendReuest,res)=>{
+   const userId = req?.user?._id;
+   const{address} = req.body;
+   const response = await ckeckout({userId,address})
+   res.status(res.statusCode).send(response.data) 
+})
+
 
 export default router
