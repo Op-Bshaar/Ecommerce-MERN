@@ -1,6 +1,7 @@
 import { userModel } from "../models/userModel"
 import bcyrpt from "bcrypt"
 import jwt from 'jsonwebtoken'
+import { orderModel } from "../models/orderModel"
 
 interface registerDto{
     firstName:string,
@@ -46,6 +47,18 @@ export const login = async({email,password}:loginDto)=>{
     
     return {data:{message:"oops... user or email not found!"},statusCode:400}
 
+}
+interface Getorders{
+    userId:string
+}
+
+export const getorders = async({userId}:Getorders)=>{
+    try{
+        return {data:await orderModel.find({userId}),statucode:200}
+    }
+    catch(error){
+      throw error
+    }
 }
 
 const genrateJwt=(data:any)=>{
